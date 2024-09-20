@@ -107,11 +107,76 @@ newgrp docker
 docker run -d -p 80:80 --name=WebServer1 nginx
 ```
 
+# Find security group-id of specific instance
+```sh
+aws ec2 describe-instances --instance-ids <INSTANCE_ID> --query 'Reservations[*].Instances[*].[InstanceId,SecurityGroups[*].GroupId]' --output table
+
+```
+
 # Update the security group
 ## Edit inbound rules to allow all connections to port 80 or w.e port you want to use (depends on how u launched container)
+```sh
+aws ec2 authorize-security-group-ingress \
+    --group-id <group-id> \
+    --protocol http \
+    --port 80 \
+    --cidr 0.0.0.0/0
+```
 
 
 ##### Challenge Compelted #################################################
+
+# Running a docker container with a volume mount (linking a directory from host machine to container)
+```sh
+docker run -d -p 8080:80 --name=WebServer4 -v /home/cloudshell-user/www:/usr/share/nginx/html nginx
+
+elinks http://localhost:8080
+```
+
+# Make your own docker file
+## Ensure correct spelling and casing on Dockerfile
+```sh
+mkdir Builds
+cd ./Builds
+touch Dockerfile
+```
+
+# Edit docker file in a similar format to the following
+## Debian refers to the Debian Linux Distribution
+## :stable is a tag for the Debian image (version)
+```sh
+FROM debian:stable
+LABEL maintainer="mho879 <mho122@my.bcit.ca>"
+RUN apt-get update && apt-get upgrade -y && apt-get install -y apache2 telnet elinks openssh-server
+ENV MYVALUE=my-value
+```
+
+# Build docker image
+## . is the local directory
+```sh
+docker build -t <image-name> .
+```
+
+# Exposing ports 80 and 22
+## inside Dockerfile (nano Dockerfile), add...
+```sh
+EXPOSE 80
+EXPOSE 22
+```
+
+# Executing a command after container is built, not when image is built
+## CMD says “start apache, don’t run in daemon mode, and run in the foreground”
+```sh
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+```
+
+##### Building and pushing a Dockerimage to Dockerhub #################################################
+# name following 'push' will be the image name on DockerHub
+```sh
+docker build -t marcoho/mynginx .
+docker tag <image-id> mho879/mynginx
+docker push mho879/mynginx
+```
 
 1.	Create a Dockerfile that builds a Docker image.  The Docker image should install a webserver, like NGINX or Apache.  The home page of the web server should display your name and A00 number.  Hint:  You may have to use the following two Dockerfile commands:  WORKDIR and COPY. 
 
