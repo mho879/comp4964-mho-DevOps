@@ -19,28 +19,28 @@ display_menu() {
 process_user_input() {
     case $1 in\
     1)
-        ./mygit-init
+        ./mygit-init.sh
         ;;
     2)
-        ./mygit-clone
+        ./mygit-clone.sh
         ;;
     3)
-        ./mygit-commit
+        ./mygit-commit.sh
         ;;
     4)
-        ./mygit-push
+        ./mygit-push.sh
         ;;
     5)
-        ./mygit-create-directory
+        ./mygit-create-directory.sh
         ;;
     6)
-        ./mygit-delete-file
+        ./mygit-delete-file.sh
         ;;
     7)
-        ./mygit-delete-directory
+        ./mygit-delete-directory.sh
         ;;
     8)
-        ./mygit-list-contents
+        ./mygit-list-contents.sh
         ;;
     9)
         echo "Exiting..."
