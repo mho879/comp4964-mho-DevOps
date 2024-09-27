@@ -54,10 +54,18 @@ docker attach LifeCycle1
 docker exec -it LifeCycle1 /bin/bash
 ```
 
+# Stop and remove all containters
+```sh
+docker stop `docker ps -q`
+docker rm `docker ps -a -q`
+```
+
 # Deleting unused images
 ## There must not be any containers using them - running or stopped
+## Can also remove all images
 ```sh
 docker rmi <image-name>
+docker rmi `docker images -q`
 ```
 
 # Removing a specific container or all containers (Bash-specific)
