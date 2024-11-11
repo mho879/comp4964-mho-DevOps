@@ -40,7 +40,7 @@ const Navbar = () => {
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <a href="#" className="text-xl font-bold text-gray-800">Your Name</a>
+          <a href="#" className="text-xl font-bold text-gray-800">Marco Ho</a>
           
           <div className="hidden md:flex space-x-8">
             <a href="#projects" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Projects</a>
