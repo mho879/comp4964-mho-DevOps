@@ -16,8 +16,8 @@ function App() {
       <main>
         <Projects />
         <Skills />
-        <Experience />
         <Education />
+        <Experience />
         <Contact />
       </main>
       <footer className="bg-gray-900 text-gray-300 py-8">
