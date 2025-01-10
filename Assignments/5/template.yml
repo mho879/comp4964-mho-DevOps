@@ -1,0 +1,220 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Web Application Infrastructure with Deletion Policies'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: 'comp4964-a5-mho'
+    Description: Name prefix for resources
+
+  VpcCIDR:
+    Type: String
+    Default: '10.0.0.0/16'
+    Description: CIDR block for the VPC
+
+  InstanceType:
+    Type: String
+    Default: 't3.micro'
+    AllowedValues: 
+      - 't3.micro'
+      - 't3.small'
+    Description: EC2 instance type for web servers
+
+  KeyName:
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Description: Name of an existing EC2 KeyPair for SSH access
+
+  AmiId:
+    Type: 'AWS::EC2::Image::Id'
+    Description: 'The AMI ID for the EC2 instances'
+    Default: 'ami-055e3d4f0bbeb5878'
+
+Resources:
+  # VPC with Retain Deletion Policy
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    DeletionPolicy: Retain
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-VPC'
+
+  # Internet Gateway with Retain Policy
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    DeletionPolicy: Retain
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-IGW'
+
+  # Internet Gateway Attachment with Retain Policy
+  InternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    DeletionPolicy: Retain
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # First Subnet with Retain Policy
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    DeletionPolicy: Retain
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Select [0, !Cidr [!GetAtt VPC.CidrBlock, 2, 8]]
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-PublicSubnet1'
+
+  # Second Subnet with Retain Policy
+  PublicSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    DeletionPolicy: Retain
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Select [1, !Cidr [!GetAtt VPC.CidrBlock, 2, 8]]
+      AvailabilityZone: !Select 
+        - 1
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-PublicSubnet2'
+
+  # Route Table with Retain Policy
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    DeletionPolicy: Retain
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-PublicRT'
+
+  # Internet Route with Retain Policy
+  PublicRoute:
+    Type: 'AWS::EC2::Route'
+    DeletionPolicy: Retain
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref InternetGateway
+
+  # Subnet Route Table Associations
+  SubnetRouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    DeletionPolicy: Retain
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  SubnetRouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    DeletionPolicy: Retain
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+
+  # Security Group with Retain Policy
+  WebServerSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DeletionPolicy: Retain
+    Properties:
+      GroupDescription: !Sub '${EnvironmentName} Web Server Security Group'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: '0.0.0.0/0'
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: '0.0.0.0/0'
+
+  # Launch Template with Retain Policy
+  WebServerLaunchTemplate:
+    Type: 'AWS::EC2::LaunchTemplate'
+    DeletionPolicy: Retain
+    Properties:
+      LaunchTemplateData:
+        ImageId: !Ref AmiId
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref KeyName
+        SecurityGroupIds: 
+          - !Ref WebServerSecurityGroup
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install -y httpd
+            systemctl start httpd
+            systemctl enable httpd
+            echo "<h1>${EnvironmentName} Web Application</h1>" > /var/www/html/index.html
+
+  # Auto Scaling Group with Retain Policy
+  WebServerAutoScalingGroup:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    DeletionPolicy: Retain
+    Properties:
+      VPCZoneIdentifier:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebServerLaunchTemplate
+        Version: !GetAtt WebServerLaunchTemplate.LatestVersionNumber
+      MinSize: '1'
+      MaxSize: '2'
+      DesiredCapacity: '1'
+      TargetGroupARNs:
+        - !Ref ALBTargetGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-WebServer'
+          PropagateAtLaunch: true
+
+  # Load Balancer with Retain Policy
+  ApplicationLoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    DeletionPolicy: Retain
+    Properties:
+      Subnets:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      SecurityGroups:
+        - !Ref WebServerSecurityGroup
+      Name: !Sub '${EnvironmentName}-ALB'
+
+  # Listener with Retain Policy
+  ALBListener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    DeletionPolicy: Retain
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALBTargetGroup
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+  # Target Group with Retain Policy
+  ALBTargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    DeletionPolicy: Retain
+    Properties:
+      VpcId: !Ref VPC
+      Port: 80
+      Protocol: HTTP
+      HealthCheckPath: '/'
+      Name: !Sub '${EnvironmentName}-TargetGroup'
