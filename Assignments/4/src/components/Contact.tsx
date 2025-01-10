@@ -11,7 +11,7 @@ const Contact = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <a
-              href="mailto:your.email@example.com"
+              href="mailto:marcoho879@gmail.com"
               className="flex flex-col items-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <Mail className="w-8 h-8 text-gray-900 mb-4" />

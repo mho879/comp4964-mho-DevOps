@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the React app...
+      - npm run build
+      - echo Build completed on `date`
+  
+  post_build:
+    commands:
+      - echo Build completed successfully
+      - ls -la
+      - pwd
+      - ls -la dist
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'dist'
+  discard-paths: no

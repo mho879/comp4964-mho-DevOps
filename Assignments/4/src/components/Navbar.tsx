@@ -45,8 +45,8 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-8">
             <a href="#projects" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Projects</a>
             <a href="#skills" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Skills</a>
-            <a href="#experience" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Experience</a>
             <a href="#education" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Education</a>
+            <a href="#experience" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Experience</a>
             <a href="#contact" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900">Contact</a>
           </div>
 
@@ -62,8 +62,8 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <a href="#projects" onClick={handleNavClick} className="block px-3 py-2 text-gray-600 hover:text-gray-900">Projects</a>
             <a href="#skills" onClick={handleNavClick} className="block px-3 py-2 text-gray-600 hover:text-gray-900">Skills</a>
-            <a href="#experience" onClick={handleNavClick} className="block px-3 py-2 text-gray-600 hover:text-gray-900">Experience</a>
             <a href="#education" onClick={handleNavClick} className="block px-3 py-2 text-gray-600 hover:text-gray-900">Education</a>
+            <a href="#experience" onClick={handleNavClick} className="block px-3 py-2 text-gray-600 hover:text-gray-900">Experience</a>
             <a href="#contact" onClick={handleNavClick} className="block px-3 py-2 text-gray-600 hover:text-gray-900">Contact</a>
           </div>
         </div>
