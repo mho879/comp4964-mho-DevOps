@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Calculate timestamps
+TWO_HOURS_AGO=$(date -u -v-2H +"%Y-%m-%dT%H:%M:00Z")
+ONE_HOUR_AGO=$(date -u -v-1H +"%Y-%m-%dT%H:%M:00Z")
+NOW=$(date -u +"%Y-%m-%dT%H:%M:00Z")
+
+# First hour - individual data points
+aws cloudwatch put-metric-data \
+    --metric-name RequestLatency \
+    --namespace GetStarted \
+    --timestamp $TWO_HOURS_AGO \
+    --value 87 \
+    --unit Milliseconds
+
+aws cloudwatch put-metric-data \
+    --metric-name RequestLatency \
+    --namespace GetStarted \
+    --timestamp $TWO_HOURS_AGO \
+    --value 51 \
+    --unit Milliseconds
+
+aws cloudwatch put-metric-data \
+    --metric-name RequestLatency \
+    --namespace GetStarted \
+    --timestamp $TWO_HOURS_AGO \
+    --value 125 \
+    --unit Milliseconds
+
+aws cloudwatch put-metric-data \
+    --metric-name RequestLatency \
+    --namespace GetStarted \
+    --timestamp $TWO_HOURS_AGO \
+    --value 235 \
+    --unit Milliseconds
+
+# Second hour - aggregated statistics
+aws cloudwatch put-metric-data \
+    --metric-name RequestLatency \
+    --namespace GetStarted \
+    --timestamp $ONE_HOUR_AGO \
+    --statistic-values "Sum=577,Minimum=65,Maximum=189,SampleCount=5" \
+    --unit Milliseconds
+
+# Third hour - current time, aggregated statistics
+aws cloudwatch put-metric-data \
+    --metric-name RequestLatency \
+    --namespace GetStarted \
+    --statistic-values "Sum=806,Minimum=47,Maximum=328,SampleCount=6" \
+    --unit Milliseconds
+
+# Retrieve the statistics
+# Set the time range to cover the last 3 hours
+START_TIME=$(date -u -v-3H +"%Y-%m-%dT%H:%M:00Z")
+END_TIME=$NOW
+
+aws cloudwatch get-metric-statistics \
+    --namespace GetStarted \
+    --metric-name RequestLatency \
+    --statistics Average \
+    --start-time $START_TIME \
+    --end-time $END_TIME \
+    --period 60
