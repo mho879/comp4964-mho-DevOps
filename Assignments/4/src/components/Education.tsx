@@ -4,8 +4,8 @@ import { GraduationCap, Award, ExternalLink } from 'lucide-react';
 const educationData = [
   {
     institution: 'British Columbia Institute of Technology',
-    degree: 'Cumputer Systems Technology, Diploma',
-    period: '2023 - Present'
+    degree: 'Computer Systems Technology, Diploma',
+    period: '2023 - 2025 (Graduated)'
   },
   {
     institution: 'Emily Carr University of Art and Design',
