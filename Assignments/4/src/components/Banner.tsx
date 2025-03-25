@@ -9,7 +9,7 @@ const Banner = () => {
             Marco Ho
           </h1>
           <p className="mt-2 text-lg text-gray-600">
-            AWS Cloud and Backend Developer
+            Software Developer/Engineer
           </p>
         </div>
       </div>

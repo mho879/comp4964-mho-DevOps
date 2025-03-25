@@ -2,12 +2,8 @@ import React from 'react';
 
 const skillCategories = [
   {
-    title: 'Frontend',
-    skills: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'HTML/CSS']
-  },
-  {
-    title: 'Backend',
-    skills: ['Node.js', 'Express', 'RESTful APIs', 'Python', 'Java', 'C']
+    title: 'Developer Technologies',
+    skills: ['Python', 'Java', 'C', 'Kotlin', 'RESTful APIs', 'React', 'TypeScript', 'Node.js', 'Express', 'Tailwind CSS', 'HTML/CSS', '1+ years experience with OOP']
   },
   {
     title: 'Database',
@@ -15,7 +11,11 @@ const skillCategories = [
   },
   {
     title: 'DevOps',
-    skills: ['Docker', 'AWS', 'CI/CD', 'Git', 'Jenkins']
+    skills: ['Docker', 'CI/CD', 'Git', 'Jenkins', 'AWS', 'Bash']
+  },
+  {
+    title: 'AWS',
+    skills: ['S3', 'EFS', 'EBS', 'API Gateway', 'Lambda', 'DynamoDB', 'RDS', 'EC2', 'ECS', 'EKS', 'Beanstalk', 'Cognito', 'Amplify', 'SQS', 'SES', 'SNS', 'IAM', 'CloudWatch']
   }
 ];
 
@@ -24,7 +24,7 @@ const Skills = () => {
     <section id="skills" className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-16">Skills</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillCategories.map((category, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold mb-4">{category.title}</h3>

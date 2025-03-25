@@ -11,7 +11,8 @@ const projects = [
       "Documented meeting minutes for client, team, and supervisor sessions"
     ],
     technologies: ['React', 'Typescript', 'AWS SES', 'AWS S3', 'AWS Lambda', 'Python', 'GitHub'],
-    awsServices: ['SES', 'S3', 'Lambda']
+    awsServices: ['SES', 'S3', 'Lambda'],
+    github: 'https://github.com/Vero-Ventures/clasibot/tree/main/src/email-monitoring'
   },
   {
     title: 'TimeTrack – Academic Project',
@@ -21,18 +22,20 @@ const projects = [
       'Developed User Access and Role Management on the backend, utilizing AWS Cognito, IAM, and Lambda for secure authentication and authorization',
       'Provided solutions and advice on various Amazon Web Services within a team of 10 developers',
     ],
-    technologies: ['GitHub', 'Python', 'Node.js'],
-    awsServices: ['SES', 'S3', 'Lambda', 'API Gateway', 'Amplify', 'CodePipeline', 'CodeBuild', 'Cognito', ' SNS', 'SQS', 'Cloudwatch', 'IAM']
+    technologies: ['GitHub', 'Python', 'Node.js', 'React', 'Typescript', 'Tailwind CSS'],
+    awsServices: ['SES', 'S3', 'Lambda', 'API Gateway', 'Amplify', 'CodePipeline', 'CodeBuild', 'Cognito', 'SNS', 'SQS', 'Cloudwatch', 'IAM'],
+    github: 'https://github.com/iwen-sue/comp4968-project-employee'
   },
   {
-    title: 'QuickQueue App - Academic Project',
+    title: 'Mood Buddy – Academic Project',
     description: [
-      'An app designed to provide users with recommendations and information of videogames best matching their preferences',
-      'Participated in Scrum meetings including sprint planning, daily scrum, and sprint retrospective',
-      'Optimized API endpoints and backend logic, ensuring secure user workflows and seamless microservice integration using AWS API Gateway and Lambda'
+      "An AI-powered chatbot is designed to brighten your day - enter a message, and the chatbot will respond with something to lift your spirits, whether it's a funny joke, a calming description of nature, or warm, encouraging words tailored just for you",
+      'Designed and developed the admin-dashboard page, integrating React for the frontend UI with Tailwind CSS',
+      'Optimized API endpoints and backend logic using AWS API Gateway, Lambda, and DynamoDB'
     ],
-    technologies: ['HTML', 'CSS', 'Bootstrap', 'JavaScript', 'jQuery', 'Express.js', 'EJS', 'MOngoDB', 'IGDB API', 'OpenAI'],
-    awsServices: []
+    technologies: ['React', 'Tailwind CSS', 'Typescript', 'Github', 'Vercel', 'DigitalOcean'],
+    awsServices: ['API Gateway', 'Lambda', 'DynamoDB'],
+    github: 'https://github.com/Rezah64/COMP4537-Project'
   }
 ];
 
@@ -72,6 +75,16 @@ const Projects = () => {
                         {service}
                       </span>
                     ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                    >
+                      <Github/>
+                    </a>
                   </div>
                 </div>
               </div>
