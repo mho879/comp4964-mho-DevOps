@@ -1,5 +1,3 @@
-import React from 'react';
-import { Github, Linkedin, Mail } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Banner from './components/Banner';
 import Projects from './components/Projects';
