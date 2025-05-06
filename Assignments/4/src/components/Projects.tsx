@@ -6,8 +6,8 @@ const projects = [
     title: 'Clasibot - Industry Project',
     description: [
       'An AI powered QuickBooks extension app that aims to merge traditional online accounting tools with machine learning to assist with transaction classification',
-      'Proposed and implemented solution for automated email monitoring feature',
-      "Worked with the client to setup DNS records to meet their various requirements",
+      'Developed and deployed an automated email monitoring system using AWS services, including SES, S3, and Lambda',
+      "Worked with the client to setup DNS records to meet various requirements",
       "Documented meeting minutes for client, team, and supervisor sessions"
     ],
     technologies: ['React', 'Typescript', 'AWS SES', 'AWS S3', 'AWS Lambda', 'Python', 'GitHub'],
@@ -20,6 +20,7 @@ const projects = [
       'An employee timesheet app that utilizes a serverless architecture',
       'Spearheaded the design of the serverless architecture, leveraging 13 different AWS Services',
       'Developed User Access and Role Management on the backend, utilizing AWS Cognito, IAM, and Lambda for secure authentication and authorization',
+      'Built and managed CI/CD pipelines for AWS Lambda functions using AWS CodePipeline',
       'Provided solutions and advice on various Amazon Web Services within a team of 10 developers',
     ],
     technologies: ['GitHub', 'Python', 'Node.js', 'React', 'Typescript', 'Tailwind CSS'],
